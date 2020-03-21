@@ -1,4 +1,4 @@
-GFLAG=
+GFLAG=-g
 
 a.out: A3_impl_PES1201801972.o A3_client_PES1201801972.o
 	gcc $(GFLAG) A3_impl_PES1201801972.o A3_client_PES1201801972.o

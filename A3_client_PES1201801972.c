@@ -10,5 +10,6 @@ int main()
             scanf("%d",&a[i][j]);
         }
     }
+    
     state_space_search(a);
 }
