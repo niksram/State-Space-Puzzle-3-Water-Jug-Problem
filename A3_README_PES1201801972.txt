@@ -1,0 +1,31 @@
+Data Structures:
+    Simple implementation of a doubly-linked list.
+
+    Node:
+    consists of 2 integer arrays of size 3-
+        jug[3]: holds the amount of content present in each of the 3 jugs at each instant.
+        cap[3]: holds the values of the max capacity of the 3 jugs.
+    consists of an integer called transition-
+        value 0 to 5 indicates the transition performed on the previous node to obtain the current node -
+        starting from A->B to C->B.
+        if the value is >= 6, it indicated that all transitions down below the node have been performed -
+        according to state-space-search and the node must be popped to perform the next transition.
+    2 pointers of Node* -
+        next points to the next node.
+        prev points to the previous node.
+
+
+    List:
+    consists of 2 pointers of type Node*, 'head' and 'tail'. they are initialised to NULL.
+    when the list expands, 'head' points to the start of the list and 'tail' points to th end. 
+
+Compiling Code:
+
+    no external libraries used other than the standard libraries.
+    the implementation of fundamental function is in the impl.c file
+    the client file consists of the code that performs state-space-search using the implementation functions.
+
+Key Takeaway:
+
+    the following program helps us to conceptualize the functioning of the recursive stack during dfs tranversal for the solution.
+    we can understand the functioning of back-tracking when the wrong path is taken and must not be proceeded.

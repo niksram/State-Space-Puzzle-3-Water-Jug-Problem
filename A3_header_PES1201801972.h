@@ -15,14 +15,13 @@ typedef struct List // list structure
     Node *head;
     Node *tail;
 } List;
-void list_init(List *);
-Node *create_node(int, int, int, int, int, int, int);
-void insert_at_end(List *, Node *);
-void remove_at_end(List *);
-void display(List *);
-int compare_nodes(Node *, Node *);
-int compare_all_nodes(List *, Node *);
-void transition_func(Node *, Node *, int);
-void state_space_search(int (*)[3]);
+void list_init(List *); // initialises the head and tail to NULL
+Node *create_node(int, int, int, int, int, int, int); // creates the node with parameters (transition, jug[3], capacity[3])
+void insert_at_end(List *, Node *); // insert the node at the end
+void remove_at_end(List *);// remove the node at the end
+void display(List *);   // display the entire list contents
+int compare_nodes(Node *, Node *); // compare the jug parameters only of the node.
+int compare_all_nodes(List *, Node *); // compares the node (compare_node) with all the list nodes but the last node.
+void transition_func(Node *, Node *, int); // sets the parameters for the new node from the old node based on the transition function performed.
 
 #endif

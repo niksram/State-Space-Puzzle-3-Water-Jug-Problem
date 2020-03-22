@@ -66,8 +66,8 @@ void display(List *list) // displays the entire list with contents of all 3 jugs
 }
 
 int compare_nodes(Node *node1, Node *node2)
-{ // compares 2 node jug values to find if they are the indentical state or not
-    for (int i = 0; i < 3; i++)
+{ // compares 2 node 'jug' values to find if they are the indentical state or not
+    for (int i = 0; i < 3; i++) // here, only the 'jug' values are compared, not other parameters
     {
         if (node1->jug[i] != node2->jug[i])
         {
@@ -98,115 +98,47 @@ void transition_func(Node *source, Node *dest, int val)
     {
     case 0:
     {
-        XtoY(source, dest, 0, 1);
+        XtoY(source, dest, 0, 1); // A to B
         break;
     }
     case 1:
     {
-        XtoY(source, dest, 0, 2);
+        XtoY(source, dest, 0, 2); // A to C
         break;
     }
     case 2:
     {
-        XtoY(source, dest, 1, 0);
+        XtoY(source, dest, 1, 0); // B to A
         break;
     }
     case 3:
     {
-        XtoY(source, dest, 1, 2);
+        XtoY(source, dest, 1, 2); // B to C
         break;
     }
     case 4:
     {
-        XtoY(source, dest, 2, 0);
+        XtoY(source, dest, 2, 0); // C to A
         break;
     }
     case 5:
     {
-        XtoY(source, dest, 2, 1);
+        XtoY(source, dest, 2, 1); // C to B
         break;
     }
     }
 }
 
-void XtoY(Node *source, Node *dest, int sj, int dj)
-{                                                             //generic transition function to tranfer contents from jug 'sj' to jug 'dj'. Changes reflected in the destination node
-    if (source->jug[sj] <= source->cap[dj] - source->jug[dj]) // if jug 'sj' content is less than empty space in jug 'dj'
+void XtoY(Node *old, Node *new, int source, int dest) //generic transition function to tranfer contents from jug 'source' to jug 'dest'. Changes reflected in the new node
+{
+    if (old->jug[source] <= old->cap[dest] - old->jug[dest]) // if jug 'source' content is less than empty space in jug 'dest'
     {
-        dest->jug[dj] = source->jug[dj] + source->jug[sj];
-        dest->jug[sj] = 0;
+        new->jug[dest] = old->jug[dest] + old->jug[source]; // pour entire jug 'source' into the jug 'dest'
+        new->jug[source] = 0;
     }
     else
     {
-        dest->jug[sj] = source->jug[sj] - (source->cap[dj] - source->jug[dj]);
-        dest->jug[dj] = source->cap[dj];
+        new->jug[source] = old->jug[source] - (old->cap[dest] - old->jug[dest]); // pour till empty space becomes 0
+        new->jug[dest] = old->cap[dest];
     }
-}
-
-void state_space_search(int (*mat)[3]) // the master function which performs the task by taking in the 3X3 input matrix
-{
-    Node *solution = create_node(-1, mat[2][0], mat[2][1], mat[2][2], mat[0][0], mat[0][1], mat[0][2]); // reference solution node
-    List *list = (List *)malloc(sizeof(List));
-    list_init(list); //initialising the doubly linked list
-    Node *node = create_node(-1, mat[1][0], mat[1][1], mat[1][2], mat[0][0], mat[0][1], mat[0][2]);
-    insert_at_end(list, node); //inserting root node, Transition arbitrarily set to -1
-    int count = 0;             // counter to count the number of valid solutions
-    int flag = 1;              // the flag based on which the main while loop runs
-    if (compare_nodes(list->head, solution))
-    { // if the root is the same as the solution state, the solution is the root itself
-        display(list);
-        printf("\n");
-        count++;
-        flag--;
-    }
-    while (flag)
-    {
-        if (compare_nodes(solution, node)) // if the solution exists, then display
-        {
-            display(list);
-            printf("\n");
-            count++;
-        }
-
-        if (node->prev && node->prev != list->head && node->transition >= 6)
-        {   // if a node has undergone all transitions from 0 to 5 (ie- transition >=6) and previous is not head
-            node = node->prev;
-            int val = node->transition;
-            node = node->prev;
-            remove_at_end(list);
-            remove_at_end(list); //back-track twice
-
-            Node *new = create_node(-1, node->jug[0], node->jug[1], node->jug[2], mat[0][0], mat[0][1], mat[0][2]);
-            transition_func(node, new, val + 1);    //insert a node with next transition
-            insert_at_end(list, new);
-            node = node->next;
-        }
-        else if (node->prev == list->head && node->transition >= 6)
-        {   // if the next node of the head undergone all transitions from 0 to 5 (ie- transition >=6)
-            remove_at_end(list);    // remove node
-            remove_at_end(list);    // remove root node 
-            flag--;
-        }
-        else if (node != list->head && (compare_all_nodes(list, node) || compare_nodes(solution, node)))
-        {   // if there exists a self-loop or we have reached a valid solution
-            int val = node->transition;
-            node = node->prev;
-            remove_at_end(list);    // back track once
-
-            Node *new = create_node(-1, node->jug[0], node->jug[1], node->jug[2], mat[0][0], mat[0][1], mat[0][2]);
-            transition_func(node, new, val + 1);
-            insert_at_end(list, new);   // insert node wit next transition.
-            node = node->next;
-        }
-        else
-        {
-            Node *new = create_node(-1, node->jug[0], node->jug[1], node->jug[2], mat[0][0], mat[0][1], mat[0][2]);
-            transition_func(node, new, 0);
-            insert_at_end(list, new);   // else keep proceeding by inserting node with 0th transition.
-            node = node->next;
-        }
-    }
-    free(list);
-    free(solution);
-    printf("%d\n", count);
 }
