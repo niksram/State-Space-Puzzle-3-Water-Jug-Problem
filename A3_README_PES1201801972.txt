@@ -14,7 +14,6 @@ Data Structures:
         next points to the next node.
         prev points to the previous node.
 
-
     List:
     consists of 2 pointers of type Node*, 'head' and 'tail'. they are initialised to NULL.
     when the list expands, 'head' points to the start of the list and 'tail' points to th end. 
@@ -22,10 +21,15 @@ Data Structures:
 Compiling Code:
 
     no external libraries used other than the standard libraries.
-    the implementation of fundamental function is in the impl.c file
-    the client file consists of the code that performs state-space-search using the implementation functions.
+    gcc -c A3_header_PES1201801972.h A3_client_PES1201801972.c
+    gcc -c A3_header_PES1201801972.h A3_impl_PES1201801972.c
+    gcc A3_impl_PES1201801972.o A3_client_PES1201801972.o
 
 Key Takeaway:
 
     the following program helps us to conceptualize the functioning of the recursive stack during dfs tranversal for the solution.
     we can understand the functioning of back-tracking when the wrong path is taken and must not be proceeded.
+
+Note:
+
+	instead of a function callback array, i have used a switch case to call a general function XtoY and i am passing source and destination index. 
